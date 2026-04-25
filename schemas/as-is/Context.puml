@@ -1,0 +1,10 @@
+@startuml Текущий контекст
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+Person(user, "Пользователь", "Пользователь системы")
+
+System(smart_home, "Умный дом", "Система управления умным домом")
+
+Rel(user, smart_home, "Использует")
+
+@enduml
