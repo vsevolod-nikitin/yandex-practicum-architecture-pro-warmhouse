@@ -50,12 +50,12 @@ namespace TemperatureApi.Controllers
             {
                 // Имитируем температуру в диапазоне от 0 до 30 градусов.
                 Value = Random.Shared.NextDouble() * 30d,
-                Unit = "Celsius",
+                Unit = "°C",
                 Timestamp = DateTime.UtcNow,
                 Location = location,
-                Status = "OK",
+                Status = "active",
                 SensorID = sensorID,
-                SensorType = "Thermometer",
+                SensorType = "temperature",
                 Description = $"Описание датчика, расположенного в '{location}' ({sensorID}).",
             };
         }
