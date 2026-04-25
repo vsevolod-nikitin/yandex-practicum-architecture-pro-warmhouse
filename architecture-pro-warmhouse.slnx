@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="apps/docker-compose.yml" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="apps/TemperatureApi/TemperatureApi.csproj" />
+</Solution>

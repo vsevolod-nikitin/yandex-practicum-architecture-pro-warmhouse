@@ -1,0 +1,23 @@
+[
+  {
+    "ContainingType": "TemperatureApi.Controllers.TemperatureController",
+    "Method": "GetTemperature",
+    "RelativePath": "temperature",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "location",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "sensorID",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  }
+]
