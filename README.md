@@ -51,7 +51,6 @@
 
 **Диаграмма компонентов (Components)**
 
-UserService
 ![Диаграмма компонента UserService](schemas/to-be/UserService.png)
 
 **Диаграмма кода (Code)**

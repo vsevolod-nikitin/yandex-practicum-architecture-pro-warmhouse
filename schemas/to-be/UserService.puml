@@ -1,6 +1,7 @@
 @startuml UserService
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
+Component_Ext(gateway, "ApiGateway", "Маршрутизация запросов к соответствующим сервисам")
 ComponentDb(userDb, "UserDB", "PostgreSQL", "Хранение данных пользователей и домов")
 
 Container_Boundary(userService, "UserService", "Управление пользователями и домами") {
@@ -27,5 +28,9 @@ Container_Boundary(userService, "UserService", "Управление польз�
     Rel(userRepository, userDb, "Читает и записывает данные")
     Rel(homeRepository, userDb, "Читает и записывает данные")
 }
+
+Rel(gateway, authController, "Обращается к")
+Rel(gateway, userController, "Обращается к")
+Rel(gateway, homeController, "Обращается к")
 
 @enduml
