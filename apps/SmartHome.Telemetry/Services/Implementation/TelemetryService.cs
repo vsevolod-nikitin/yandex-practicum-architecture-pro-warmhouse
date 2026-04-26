@@ -1,26 +1,63 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SmartHome.Telemetry.Model;
 using SmartHome.Telemetry.Repositories;
+using System.Text.Json;
 
 namespace SmartHome.Telemetry.Services.Implementation
 {
-    public sealed class TelemetryService(TelemetryContext context) : ITelemetryService
+    /// <summary>
+    /// Реализация сервиса для получения телеметрических данных устройств.
+    /// </summary>
+    /// <param name="context">Контекст данных телеметрии устройств.</param>
+    /// <param name="legacyFallback">Откат на получение информации с монолита.</param>
+    internal sealed class TelemetryService(
+        TelemetryContext context,
+        ILegacyFallback legacyFallback) : ITelemetryService
     {
+        /// <inheritdoc/>
         public async Task<IEnumerable<TelemetryData>?> GetTelemetryDataAsync(int deviceId, DateTime? from, DateTime? to)
         {
-            var result = context.TelemetryData.Where(t => t.DeviceId == deviceId);
+            var query = context.TelemetryData.Where(t => t.DeviceId == deviceId);
 
             if (from.HasValue)
             {
-                result = result.Where(t => t.Timestamp >= from.Value);
+                query = query.Where(t => t.Timestamp >= from.Value);
             }
 
             if (to.HasValue)
             {
-                result = result.Where(t => t.Timestamp <= to.Value);
+                query = query.Where(t => t.Timestamp <= to.Value);
             }
 
-            return await result.OrderBy(t => t.Timestamp).AsNoTracking().ToArrayAsync();
+            var result = await query.OrderBy(t => t.Timestamp).AsNoTracking().ToArrayAsync();
+            if (result.Length > 0)
+            {
+                return result;
+            }
+
+            // Если данных нет, пробуем получить их с монолита
+            var legacyData = await legacyFallback.GetTelemetryAsync(deviceId);
+            if (legacyData is not null)
+            {
+                // Преобразовываем старый формат
+                var data = new
+                {
+                    value = legacyData.Value,
+                    unit = legacyData.Unit,
+                    status = legacyData.Status,
+                };
+
+                var telemetryData = new TelemetryData
+                {
+                    DeviceId = deviceId,
+                    Timestamp = legacyData.LastUpdated,
+                    Data = JsonSerializer.Serialize(data)
+                };
+
+                return [telemetryData];
+            }
+
+            return null;
         }
     }
 }

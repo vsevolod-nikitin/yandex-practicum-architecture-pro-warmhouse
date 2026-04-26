@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SmartHome.Telemetry.Model;
 using SmartHome.Telemetry.Services;
 
 namespace SmartHome.Telemetry.Controllers
@@ -19,9 +20,16 @@ namespace SmartHome.Telemetry.Controllers
         /// <param name="to">Конечная дата и время периода.</param>
         /// <returns>Коллекция телеметрических данных.</returns>
         [HttpGet("{deviceId}")]
+        [ProducesResponseType<TelemetryData[]>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetTelemetryData([FromRoute] int deviceId, [FromQuery] DateTime? from, [FromQuery] DateTime? to)
         {
             var telemetryData = await service.GetTelemetryDataAsync(deviceId, from, to);
+            if (telemetryData is null)
+            {
+                return NotFound();
+            }
+
             return Ok(telemetryData);
         }
     }
