@@ -17,6 +17,7 @@ Container_Boundary(automationService, "AutomationService", "Управление
 
     Rel(automationServiceImpl, automationRepository, "Взаимодействует с данными через")
     Rel(automationScheduler, automationRepository, "Получает информацию через")
+    Rel(automationServiceImpl, automationScheduler, "Сообщает об изменении расписаний")
 
     Rel(automationRepository, automationDb, "Читает и записывает данные")
 }
