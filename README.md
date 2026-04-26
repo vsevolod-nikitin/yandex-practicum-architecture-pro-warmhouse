@@ -63,6 +63,10 @@ TelemetryService
 
 ![Диаграмма компонента TelemetryService](schemas/to-be/TelemetryService.png)
 
+AutomationService
+
+![Диаграмма компонента AutomationService](schemas/to-be/AutomationService.png)
+
 **Диаграмма кода (Code)**
 
 Добавьте одну диаграмму или несколько.

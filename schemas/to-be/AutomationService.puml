@@ -1,0 +1,27 @@
+@startuml AutomationService
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Component_Ext(gateway, "ApiGateway", "Маршрутизация запросов к соответствующим сервисам")
+Component_Ext(deviceService, "DeviceService", "Управление устройствами")
+ComponentDb(automationDb, "AutomationDB", "PostgreSQL", "Хранение данных автоматизации")
+
+Container_Boundary(automationService, "AutomationService", "Управление автоматизацией и сценариями") {
+    Component(automationController, "AutomationController", "REST API для управления автоматизацией")
+
+    Component(automationServiceImpl, "AutomationService", "Бизнес-логика управления автоматизацией и сценариями")
+    Component(automationScheduler, "AutomationScheduler", "Планировщик для выполнения сценариев автоматизации")
+
+    Component(automationRepository, "AutomationRepository", "Доступ к данным автоматизации")
+
+    Rel(automationController, automationServiceImpl, "Использует")
+
+    Rel(automationServiceImpl, automationRepository, "Взаимодействует с данными через")
+    Rel(automationScheduler, automationRepository, "Получает информацию через")
+
+    Rel(automationRepository, automationDb, "Читает и записывает данные")
+}
+
+Rel(gateway, automationController, "Обращается к")
+Rel(automationScheduler, deviceService, "Отправляет команды для устройств")
+
+@enduml

@@ -4,6 +4,7 @@
 Component_Ext(gateway, "ApiGateway", "Маршрутизация запросов к соответствующим сервисам")
 Component_Ext(deprecatedMonolith, "Устаревший монолит", "Старая версия системы, которая будет постепенно заменяться новыми сервисами")
 Component_Ext(containerQueue, "MQTT", "Брокер сообщений для обмена данными с устройствами")
+Component_Ext(automationService, "AutomationService", "Управление автоматизацией и сценариями")
 ComponentDb(deviceDb, "DeviceDB", "PostgreSQL", "Хранение данных устройств")
 
 Container_Boundary(deviceService, "DeviceService", "Управление устройствами") {
@@ -24,6 +25,7 @@ Container_Boundary(deviceService, "DeviceService", "Управление уст�
 
 Rel(gateway, devicesController, "Обращается к")
 Rel(gateway, commandsController, "Обращается к")
+Rel(automationService, commandsController, "Отправляет команды для устройств")
 
 Rel(devicesService, deprecatedMonolith, "Получает информацию об устройствах отопления")
 Rel(commandsService, deprecatedMonolith, "Управляет отоплением")
