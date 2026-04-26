@@ -89,7 +89,12 @@ TelemetryService
 
 ### 2. Документация API
 
-Здесь приложите ссылки на документацию API для микросервисов, которые вы спроектировали в первой части проектной работы. Для документирования используйте Swagger/OpenAPI или AsyncAPI.
+Актуальная документация будет доступна после запуска приложения по адресам:
+- TelemetryService: http://localhost:8083/swagger/index.html
+
+
+Документация в виде .json файлов расположена по пути:
+- TelemetryService: [schemas/api/TelemetryService.json](schemas/api/TelemetryService.json)
 
 # Задание 5. Работа с docker и docker-compose
 

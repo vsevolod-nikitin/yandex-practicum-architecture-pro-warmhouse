@@ -3,6 +3,7 @@ using SmartHome.Telemetry.Model;
 using SmartHome.Telemetry.Repositories;
 using SmartHome.Telemetry.Services;
 using SmartHome.Telemetry.Services.Implementation;
+using System.Reflection;
 
 namespace SmartHome.Telemetry
 {
@@ -34,7 +35,13 @@ namespace SmartHome.Telemetry
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(options =>
+            {
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+
+                options.IncludeXmlComments(xmlPath);
+            });
 
             var app = builder.Build();
 
