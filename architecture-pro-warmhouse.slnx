@@ -3,5 +3,8 @@
     <File Path="apps/docker-compose.yml" />
     <File Path="README.md" />
   </Folder>
-  <Project Path="apps/TemperatureApi/TemperatureApi.csproj" />
+  <Folder Name="/src/">
+    <Project Path="apps/SmartHome.Devices/SmartHome.Devices.csproj" Id="a24d1982-2f70-4696-bc32-2e1eb4fecdb5" />
+    <Project Path="apps/TemperatureApi/TemperatureApi.csproj" />
+  </Folder>
 </Solution>

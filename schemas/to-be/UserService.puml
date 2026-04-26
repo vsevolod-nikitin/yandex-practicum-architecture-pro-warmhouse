@@ -7,15 +7,15 @@ ComponentDb(userDb, "UserDB", "PostgreSQL", "Хранение данных по�
 Container_Boundary(userService, "UserService", "Управление пользователями и домами") {
     Component(authController, "AuthController", "REST API для аутентификации и управления сессиями")
     Component(usersController, "UsersController", "REST API для управления пользователями (CRUD)")
-    Component(housesController, "HousesController", "REST API для управления домами и устройствами в домах (CRUD)")
+    Component(housesController, "HousesController", "REST API для управления домами (CRUD)")
 
     Component(authService, "AuthService", "Аутентификация, управление сессиями")
     Component(usersService, "UsersService", "Бизнес-логика управления пользователями")
-    Component(housesService, "HousesService", "Бизнес-логика управления домами и устройствами в домах")
+    Component(housesService, "HousesService", "Бизнес-логика управления домами")
         
     Component(authRepository, "AuthRepository", "Доступ к данным аутентификации и сессий")
     Component(usersRepository, "UsersRepository", "Доступ к данным пользователей")
-    Component(housesRepository, "HousesRepository", "Доступ к данным домов и устройств в домах")
+    Component(housesRepository, "HousesRepository", "Доступ к данным домов")
     Rel(authController, authService, "Использует")
     Rel(usersController, usersService, "Использует")
     Rel(housesController, housesService, "Использует")

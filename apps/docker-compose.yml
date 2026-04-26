@@ -7,8 +7,8 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./smart_home/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
@@ -28,7 +28,7 @@ services:
     ports:
       - "8081:8081"
     environment:
-      ASPNETCORE_HTTP_PORTS: 8081
+      - ASPNETCORE_HTTP_PORTS=8081
     restart: unless-stopped
     networks:
       - smarthome-network
@@ -48,6 +48,20 @@ services:
       - TEMPERATURE_API_URL=http://temperature-api:8081
     ports:
       - "8080:8080"
+    restart: unless-stopped
+    networks:
+      - smarthome-network
+
+  smarthome-devices:
+    build:
+      context: .
+      dockerfile: SmartHome.Devices/Dockerfile
+    container_name: smarthome-devices
+    ports:
+      - "8082:8082"
+    environment:
+      - ASPNETCORE_HTTP_PORTS=8082
+      - ConnectionStrings__DbConnection=Host=postgres;Port=5432;Database=smarthome-devices;Username=postgres;Password=postgres
     restart: unless-stopped
     networks:
       - smarthome-network
