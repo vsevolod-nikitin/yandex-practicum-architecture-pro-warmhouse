@@ -69,7 +69,9 @@ AutomationService
 
 **Диаграмма кода (Code)**
 
-Добавьте одну диаграмму или несколько.
+TelemetryService
+
+![Диаграмма кода TelemetryService](schemas/to-be/TelemetryServiceCode.png)
 
 # Задание 3. Разработка ER-диаграммы
 

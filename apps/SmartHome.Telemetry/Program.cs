@@ -6,7 +6,7 @@ using SmartHome.Telemetry.Services.Implementation;
 
 namespace SmartHome.Telemetry
 {
-    public class Program
+    static class Program
     {
         public static void Main(string[] args)
         {
@@ -26,7 +26,7 @@ namespace SmartHome.Telemetry
 
                 if (string.IsNullOrWhiteSpace(legacyApiUrl))
                 {
-                    throw new InvalidOperationException("Configuration value 'LEGACY_API_URL' is missing.");
+                    throw new InvalidOperationException("Ключ конфигурации 'LEGACY_API_URL' отсутствует.");
                 }
 
                 client.BaseAddress = new Uri(legacyApiUrl);

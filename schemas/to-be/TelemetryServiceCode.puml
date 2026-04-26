@@ -1,0 +1,23 @@
+@startuml TelemetryServiceCode
+
+class TelemetryController{
+    +GetTelemetryData(int deviceId, DateTime from, DateTime to) : TelemetryData[]
+}
+
+class TelemetryService {
+    +GetTelemetryDataAsync(int deviceId, DateTime from, DateTime to) : TelemetryData[]
+}
+
+class TelemetryContext{
+    +TelemetryData : DbSet<Telemetry> <<get>> <<set>>
+}
+
+class LegacyFallback{
+    +GetTelemetryAsync(int deviceId) : LegacyResponse
+}
+
+TelemetryController --> TelemetryService : использует
+TelemetryService --> TelemetryContext : взаимодействует с данными через
+TelemetryService --> LegacyFallback : получает данные от устаревшей системы через
+
+@enduml
