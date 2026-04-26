@@ -59,6 +59,10 @@ DeviceService
 
 ![Диаграмма компонента DeviceService](schemas/to-be/DeviceService.png)
 
+TelemetryService
+
+![Диаграмма компонента TelemetryService](schemas/to-be/TelemetryService.png)
+
 **Диаграмма кода (Code)**
 
 Добавьте одну диаграмму или несколько.
