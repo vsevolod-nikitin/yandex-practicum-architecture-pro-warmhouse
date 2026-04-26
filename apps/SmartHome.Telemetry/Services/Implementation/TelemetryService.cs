@@ -6,7 +6,7 @@ namespace SmartHome.Telemetry.Services.Implementation
 {
     public sealed class TelemetryService(TelemetryContext context) : ITelemetryService
     {
-        public async Task<IEnumerable<TelemetryData>> GetTelemetryDataAsync(int deviceId, DateTime? from, DateTime? to)
+        public async Task<IEnumerable<TelemetryData>?> GetTelemetryDataAsync(int deviceId, DateTime? from, DateTime? to)
         {
             var result = context.TelemetryData.Where(t => t.DeviceId == deviceId);
 
@@ -20,7 +20,7 @@ namespace SmartHome.Telemetry.Services.Implementation
                 result = result.Where(t => t.Timestamp <= to.Value);
             }
 
-            return await result.AsNoTracking().ToArrayAsync();
+            return await result.OrderBy(t => t.Timestamp).AsNoTracking().ToArrayAsync();
         }
     }
 }

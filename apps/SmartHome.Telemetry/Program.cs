@@ -15,7 +15,7 @@ namespace SmartHome.Telemetry
 
             builder.Services.AddDbContext<TelemetryContext>(options =>
             {
-                options.UseNpgsql(connectionString);
+                options.UseNpgsql(connectionString).UseSnakeCaseNamingConvention();
             });
 
             builder.Services.AddTransient<ITelemetryService, TelemetryService>();
