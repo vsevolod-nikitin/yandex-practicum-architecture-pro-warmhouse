@@ -1,4 +1,6 @@
-﻿namespace SmartHome.Devices.Model
+﻿using System.Text.Json.Serialization;
+
+namespace SmartHome.Devices.Model
 {
     public sealed class Device
     {
@@ -8,6 +10,7 @@
         public required string SerialId { get; set; }
         public string? Name { get; set; }
 
+        [JsonIgnore]
         public DeviceType Type { get; set; } = null!;
     }
 }

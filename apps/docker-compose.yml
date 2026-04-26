@@ -66,6 +66,20 @@ services:
     networks:
       - smarthome-network
 
+  smarthome-telemetry:
+    build:
+      context: .
+      dockerfile: SmartHome.Telemetry/Dockerfile
+    container_name: smarthome-telemetry
+    ports:
+      - "8083:8083"
+    environment:
+      - ASPNETCORE_HTTP_PORTS=8083
+      - ConnectionStrings__DbConnection=Host=postgres;Port=5432;Database=smarthome-telemetry;Username=postgres;Password=postgres
+    restart: unless-stopped
+    networks:
+      - smarthome-network
+
 volumes:
   postgres_data:
 
