@@ -51,7 +51,13 @@
 
 **Диаграмма компонентов (Components)**
 
+UserService
+
 ![Диаграмма компонента UserService](schemas/to-be/UserService.png)
+
+DeviceService
+
+![Диаграмма компонента DeviceService](schemas/to-be/DeviceService.png)
 
 **Диаграмма кода (Code)**
 

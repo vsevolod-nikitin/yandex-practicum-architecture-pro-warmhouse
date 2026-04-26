@@ -6,31 +6,31 @@ ComponentDb(userDb, "UserDB", "PostgreSQL", "Хранение данных по�
 
 Container_Boundary(userService, "UserService", "Управление пользователями и домами") {
     Component(authController, "AuthController", "REST API для аутентификации и управления сессиями")
-    Component(userController, "UsersController", "REST API для управления пользователями (CRUD)")
-    Component(homeController, "HomesController", "REST API для управления домами и устройствами в домах (CRUD)")
+    Component(usersController, "UsersController", "REST API для управления пользователями (CRUD)")
+    Component(homesController, "HomesController", "REST API для управления домами и устройствами в домах (CRUD)")
 
     Component(authService, "AuthService", "Аутентификация, управление сессиями")
-    Component(userServiceImpl, "UsersService", "Бизнес-логика управления пользователями")
-    Component(homeService, "HomesService", "Бизнес-логика управления домами и устройствами в домах")
+    Component(usersService, "UsersService", "Бизнес-логика управления пользователями")
+    Component(homesService, "HomesService", "Бизнес-логика управления домами и устройствами в домах")
         
     Component(authRepository, "AuthRepository", "Доступ к данным аутентификации и сессий")
-    Component(userRepository, "UsersRepository", "Доступ к данным пользователей")
-    Component(homeRepository, "HomesRepository", "Доступ к данным домов и устройств в домах")
+    Component(usersRepository, "UsersRepository", "Доступ к данным пользователей")
+    Component(homesRepository, "HomesRepository", "Доступ к данным домов и устройств в домах")
     Rel(authController, authService, "Использует")
-    Rel(userController, userServiceImpl, "Использует")
-    Rel(homeController, homeService, "Использует")
+    Rel(usersController, usersService, "Использует")
+    Rel(homesController, homesService, "Использует")
 
     Rel(authService, authRepository, "Взаимодействует с данными через")
-    Rel(userServiceImpl, userRepository, "Взаимодействует с данными через")
-    Rel(homeService, homeRepository, "Взаимодействует с данными через")
+    Rel(usersService, usersRepository, "Взаимодействует с данными через")
+    Rel(homesService, homesRepository, "Взаимодействует с данными через")
 
     Rel(authRepository, userDb, "Читает и записывает данные")
-    Rel(userRepository, userDb, "Читает и записывает данные")
-    Rel(homeRepository, userDb, "Читает и записывает данные")
+    Rel(usersRepository, userDb, "Читает и записывает данные")
+    Rel(homesRepository, userDb, "Читает и записывает данные")
 }
 
 Rel(gateway, authController, "Обращается к")
-Rel(gateway, userController, "Обращается к")
-Rel(gateway, homeController, "Обращается к")
+Rel(gateway, usersController, "Обращается к")
+Rel(gateway, homesController, "Обращается к")
 
 @enduml

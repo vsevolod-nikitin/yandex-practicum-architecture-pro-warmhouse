@@ -1,0 +1,32 @@
+@startuml DeviceService
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Component_Ext(gateway, "ApiGateway", "Маршрутизация запросов к соответствующим сервисам")
+Component_Ext(deprecatedMonolith, "Устаревший монолит", "Старая версия системы, которая будет постепенно заменяться новыми сервисами")
+Component_Ext(containerQueue, "MQTT", "Брокер сообщений для обмена данными с устройствами")
+ComponentDb(deviceDb, "DeviceDB", "PostgreSQL", "Хранение данных устройств")
+
+Container_Boundary(deviceService, "DeviceService", "Управление устройствами") {
+    Component(devicesController, "DevicesController", "REST API для управления устройствами (CRUD)")
+    Component(commandsController, "CommandsController", "REST API для отправки команд устройствам")
+
+    Component(devicesService, "DevicesService", "Бизнес-логика управления устройствами")
+    Component(commandsService, "CommandsService", "Бизнес-логика отправки команд устройствам")
+
+    Component(devicesRepository, "DevicesRepository", "Доступ к данным устройств")
+
+    Rel(devicesController, devicesService, "Использует")
+    Rel(commandsController, commandsService, "Использует")
+
+    Rel(devicesService, devicesRepository, "Взаимодействует с данными через")
+    Rel(devicesRepository, deviceDb, "Читает и записывает данные")
+}
+
+Rel(gateway, devicesController, "Обращается к")
+Rel(gateway, commandsController, "Обращается к")
+
+Rel(devicesService, deprecatedMonolith, "Получает информацию об устройствах отопления")
+Rel(commandsService, deprecatedMonolith, "Управляет отоплением")
+Rel_Right(commandsService, containerQueue, "Публикует команды для устройств")
+
+@enduml
