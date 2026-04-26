@@ -13,7 +13,7 @@ namespace SmartHome.Telemetry.Model
     public sealed class TelemetryData
     {
         /// <summary>
-        /// Уникальный идентификатор записи.
+        /// Уникальный идентификатор.
         /// </summary>
         [Key]
         [JsonIgnore]

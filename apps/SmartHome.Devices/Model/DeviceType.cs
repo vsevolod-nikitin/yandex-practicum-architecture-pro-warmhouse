@@ -1,10 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace SmartHome.Devices.Model
 {
     /// <summary>
     /// Тип устройства в рамках умного дома.
     /// </summary>
+    [Index(nameof(Name))]
     public sealed class DeviceType
     {
         /// <summary>

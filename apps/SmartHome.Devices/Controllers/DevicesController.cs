@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SmartHome.Devices.Model;
 using SmartHome.Devices.Services;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -21,7 +20,7 @@ namespace SmartHome.Devices.Controllers
         /// <response code="200">Устройства успешно получены.</response>
         /// <response code="400">Некорректный запрос.</response>
         [HttpGet("house/{houseId}")]
-        [ProducesResponseType<Device[]>(StatusCodes.Status200OK, Application.Json)]
+        [ProducesResponseType<DeviceDto[]>(StatusCodes.Status200OK, Application.Json)]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, Application.Json)]
         public async Task<IActionResult> GetDevicesForHouse([FromRoute] long houseId)
         {
@@ -38,7 +37,7 @@ namespace SmartHome.Devices.Controllers
         /// <response code="400">Некорректный запрос.</response>
         /// <response code="404">Устройство не найдено.</response>
         [HttpGet("{deviceId}")]
-        [ProducesResponseType<Device>(StatusCodes.Status200OK, Application.Json)]
+        [ProducesResponseType<DeviceDto>(StatusCodes.Status200OK, Application.Json)]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, Application.Json)]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound, Application.Json)]
         public async Task<IActionResult> GetDeviceById([FromRoute] long deviceId)
@@ -60,14 +59,21 @@ namespace SmartHome.Devices.Controllers
         /// <response code="201">Устройство успешно создано.</response>
         /// <response code="400">Некорректный запрос.</response>
         [HttpPost("")]
-        [ProducesResponseType<Device>(StatusCodes.Status201Created, Application.Json)]
+        [ProducesResponseType<DeviceDto>(StatusCodes.Status201Created, Application.Json)]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, Application.Json)]
-        public async Task<IActionResult> CreateDevice([FromBody] Device device)
+        public async Task<IActionResult> CreateDevice([FromBody] DeviceDto device)
         {
-            var deviceId = await service.CreateDeviceAsync(device);
-            device.Id = deviceId;
+            try
+            {
+                var deviceId = await service.CreateDeviceAsync(device);
+                device.Id = deviceId;
 
-            return CreatedAtAction(nameof(GetDeviceById), new { deviceId }, device);
+                return CreatedAtAction(nameof(GetDeviceById), new { deviceId }, device);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         /// <summary>
@@ -80,18 +86,25 @@ namespace SmartHome.Devices.Controllers
         /// <response code="400">Некорректный запрос.</response>
         /// <response code="404">Устройство не найдено.</response>
         [HttpPut("{deviceId}")]
-        [ProducesResponseType<Device>(StatusCodes.Status200OK, Application.Json)]
+        [ProducesResponseType<DeviceDto>(StatusCodes.Status200OK, Application.Json)]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, Application.Json)]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound, Application.Json)]
-        public async Task<IActionResult> UpdateDevide([FromRoute] long deviceId, [FromBody] Device device)
+        public async Task<IActionResult> UpdateDevide([FromRoute] long deviceId, [FromBody] DeviceDto device)
         {
-            var updatedDevice = await service.UpdateDeviceAsync(deviceId, device);
-            if (updatedDevice is null)
+            try
             {
-                return NotFound();
-            }
+                var updatedDevice = await service.UpdateDeviceAsync(deviceId, device);
+                if (updatedDevice is null)
+                {
+                    return NotFound();
+                }
 
-            return Ok(updatedDevice);
+                return Ok(updatedDevice);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         /// <summary>

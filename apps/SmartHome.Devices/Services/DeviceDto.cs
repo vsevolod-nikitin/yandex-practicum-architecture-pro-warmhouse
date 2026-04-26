@@ -1,19 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace SmartHome.Devices.Model
+﻿namespace SmartHome.Devices.Services
 {
     /// <summary>
-    /// Данные устройства в рамках умного дома.
+    /// Информация об устройстве в рамках умного дома.
     /// </summary>
-    [Index(nameof(HouseId))]
-    internal sealed class Device
+    public sealed class DeviceDto
     {
         /// <summary>
-        /// Уникальный идентификатор.
+        /// Идентификатор устройства.
         /// </summary>
-        [Key]
         public long Id { get; set; }
 
         /// <summary>
@@ -22,9 +16,9 @@ namespace SmartHome.Devices.Model
         public required long HouseId { get; set; }
 
         /// <summary>
-        /// Идентификатор типа устройства.
+        /// Наименование типа устройства.
         /// </summary>
-        public required long TypeId { get; set; }
+        public required string TypeName { get; set; }
 
         /// <summary>
         /// Наименование устройства.
@@ -35,11 +29,5 @@ namespace SmartHome.Devices.Model
         /// Местоположение устройства.
         /// </summary>
         public string? Location { get; set; }
-
-        /// <summary>
-        /// Тип устройства.
-        /// </summary>
-        [ForeignKey(nameof(TypeId))]
-        public DeviceType Type { get; set; } = null!;
     }
 }
