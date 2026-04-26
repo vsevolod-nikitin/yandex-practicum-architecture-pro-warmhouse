@@ -4,6 +4,7 @@
 Person(user, "User", "Пользователь системы")
 
 System_Ext(device, "Подключаемое устройство", "IoT устройство (ворота, термостат)")
+System_Ext(deprecatedMonolith, "Устаревший монолит", "Старая версия системы, которая будет постепенно заменяться новыми сервисами")
 
 Container(apiGateway, "ApiGateway", "Маршрутизация запросов к соответствующим сервисам")
 
@@ -24,15 +25,15 @@ System_Boundary(deviceDomain, "Устройства") {
 
 System_Boundary(telemetryDomain, "Телеметрия") {
     Container(telemetryService, "TelemetryService", "Сбор и обработка данных от устройств")
-    ContainerDb(telemetryDb, "TelemetryDB", "Time series DB", "Хранение телеметрии от устройств")
+    ContainerDb(telemetryDb, "TelemetryDB", "PostgreSQL", "Хранение телеметрии от устройств")
 }
 
 ContainerQueue(deviceQueue, "MQTT", "Брокер сообщений для обмена данными с устройствами")
 
-Rel_Down(user, apiGateway, "Использует")
-Rel_Right(user, device, "Взаимодействует с")
+Rel(user, apiGateway, "Использует")
+Rel_Left(user, device, "Взаимодействует с")
 
-Rel(apiGateway, userService, "Управляет пользователями и домами")
+Rel_Left(apiGateway, userService, "Управляет пользователями и домами")
 Rel(apiGateway, automationService, "Настраивает автоматизацию")
 Rel(apiGateway, deviceService, "Управляет устройствами")
 Rel(apiGateway, telemetryService, "Получает данные от устройств")
@@ -43,9 +44,14 @@ Rel(automationService, automationDb, "Читает и записывает")
 Rel(telemetryService, telemetryDb, "Читает и записывает")
 
 Rel(automationService, deviceService, "Отправляет команды")
-Rel(deviceService, deviceQueue, "Публикует команды и получает данные")
+Rel_Left(deviceService, deviceQueue, "Публикует команды и получает данные")
 Rel(telemetryService, deviceQueue, "Подписывается на данные от устройств")
 
 Rel(device, deviceQueue, "Отправляет данные и получает команды")
+
+Rel(deviceService, deprecatedMonolith, "Управляет отоплением")
+Rel(telemetryService, deprecatedMonolith, "Получает данные температуры")
+
+LAYOUT_TOP_DOWN()
 
 @enduml
