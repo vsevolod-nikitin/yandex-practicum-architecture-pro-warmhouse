@@ -9,7 +9,7 @@ class TelemetryService {
 }
 
 class TelemetryContext{
-    +TelemetryData : DbSet<Telemetry> <<get>> <<set>>
+    +TelemetryData : DbSet<TelemetryData> <<get>> <<set>>
 }
 
 class LegacyFallback{
