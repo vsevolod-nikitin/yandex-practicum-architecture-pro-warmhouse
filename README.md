@@ -69,6 +69,10 @@ AutomationService
 
 **Диаграмма кода (Code)**
 
+DeviceService
+
+![Диаграмма кода DeviceService](schemas/to-be/DeviceServiceCode.png)
+
 TelemetryService
 
 ![Диаграмма кода TelemetryService](schemas/to-be/TelemetryServiceCode.png)

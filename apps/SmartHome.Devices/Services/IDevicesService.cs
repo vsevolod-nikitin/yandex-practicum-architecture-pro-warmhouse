@@ -10,7 +10,7 @@
         /// </summary>
         /// <param name="houseId">Идентификатор дома.</param>
         /// <returns>Список устройств.</returns>
-        Task<IEnumerable<DeviceDto>> GetDevicesAsync(long houseId);
+        Task<IEnumerable<DeviceDto>> GetDevicesForHouseAsync(long houseId);
 
         /// <summary>
         /// Получить устройство по его идентификатору.

@@ -17,7 +17,7 @@ namespace SmartHome.Devices.Services.Implementation
         private const string LegacySensorType = "LegacySensor";
 
         /// <inheritdoc/>
-        public async Task<IEnumerable<DeviceDto>> GetDevicesAsync(long houseId)
+        public async Task<IEnumerable<DeviceDto>> GetDevicesForHouseAsync(long houseId)
         {
             var devices = await context.Devices
                 .Where(x => x.HouseId == houseId)

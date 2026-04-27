@@ -24,7 +24,7 @@ namespace SmartHome.Devices.Controllers
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, Application.Json)]
         public async Task<IActionResult> GetDevicesForHouse([FromRoute] long houseId)
         {
-            var devices = await service.GetDevicesAsync(houseId);
+            var devices = await service.GetDevicesForHouseAsync(houseId);
             return Ok(devices);
         }
 
@@ -89,7 +89,7 @@ namespace SmartHome.Devices.Controllers
         [ProducesResponseType<DeviceDto>(StatusCodes.Status200OK, Application.Json)]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest, Application.Json)]
         [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound, Application.Json)]
-        public async Task<IActionResult> UpdateDevide([FromRoute] long deviceId, [FromBody] DeviceDto device)
+        public async Task<IActionResult> UpdateDevice([FromRoute] long deviceId, [FromBody] DeviceDto device)
         {
             try
             {
