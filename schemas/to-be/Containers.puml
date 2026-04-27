@@ -8,9 +8,9 @@ System_Ext(deprecatedMonolith, "Устаревший монолит", "Стар�
 
 Container(apiGateway, "ApiGateway", "Маршрутизация запросов к соответствующим сервисам")
 
-System_Boundary(userDomain, "Пользователи и дома") {
-    Container(userService, "UserService", "Управление пользователями и домами")
-    ContainerDb(userDb, "UserDB", "PostgreSQL", "Хранение данных пользователей и домов")
+System_Boundary(usersDomain, "Пользователи и дома") {
+    Container(usersService, "UsersService", "Управление пользователями и домами")
+    ContainerDb(usersDb, "UsersDB", "PostgreSQL", "Хранение данных пользователей и домов")
 }
 
 System_Boundary(automationDomain, "Автоматизация") {
@@ -18,9 +18,9 @@ System_Boundary(automationDomain, "Автоматизация") {
     ContainerDb(automationDb, "AutomationDB", "PostgreSQL", "Хранение данных сценариев автоматизации")
 }
 
-System_Boundary(deviceDomain, "Устройства") {
-    Container(deviceService, "DeviceService", "Управление устройствами, отправка команд, получение данных")    
-    ContainerDb(deviceDb, "DeviceDB", "PostgreSQL", "Хранение данных устройств")    
+System_Boundary(devicesDomain, "Устройства") {
+    Container(devicesService, "DevicesService", "Управление устройствами, отправка команд, получение данных")    
+    ContainerDb(devicesDb, "DevicesDB", "PostgreSQL", "Хранение данных устройств")    
 }
 
 System_Boundary(telemetryDomain, "Телеметрия") {
@@ -33,23 +33,23 @@ ContainerQueue(deviceQueue, "MQTT", "Брокер сообщений для об
 Rel(user, apiGateway, "Использует")
 Rel_Left(user, device, "Взаимодействует с")
 
-Rel_Left(apiGateway, userService, "Управляет пользователями и домами")
+Rel_Left(apiGateway, usersService, "Управляет пользователями и домами")
 Rel(apiGateway, automationService, "Настраивает автоматизацию")
-Rel(apiGateway, deviceService, "Управляет устройствами")
+Rel(apiGateway, devicesService, "Управляет устройствами")
 Rel(apiGateway, telemetryService, "Получает данные от устройств")
 
-Rel(userService, userDb, "Читает и записывает")
-Rel(deviceService, deviceDb, "Читает и записывает")
+Rel(usersService, usersDb, "Читает и записывает")
+Rel(devicesService, devicesDb, "Читает и записывает")
 Rel(automationService, automationDb, "Читает и записывает")
 Rel(telemetryService, telemetryDb, "Читает и записывает")
 
-Rel(automationService, deviceService, "Отправляет команды")
-Rel_Left(deviceService, deviceQueue, "Публикует команды и получает данные")
+Rel(automationService, devicesService, "Отправляет команды")
+Rel_Left(devicesService, deviceQueue, "Публикует команды и получает данные")
 Rel(telemetryService, deviceQueue, "Подписывается на данные от устройств")
 
 Rel(device, deviceQueue, "Отправляет данные и получает команды")
 
-Rel(deviceService, deprecatedMonolith, "Управляет отоплением")
+Rel(devicesService, deprecatedMonolith, "Управляет отоплением")
 Rel(telemetryService, deprecatedMonolith, "Получает данные температуры")
 
 LAYOUT_TOP_DOWN()

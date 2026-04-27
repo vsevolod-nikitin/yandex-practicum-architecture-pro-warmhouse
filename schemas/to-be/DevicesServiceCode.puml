@@ -1,4 +1,4 @@
-@startuml DeviceServiceCode
+@startuml DevicesServiceCode
 
 class DevicesController{
     +GetDevicesForHouse(long houseId) : DeviceDto[]

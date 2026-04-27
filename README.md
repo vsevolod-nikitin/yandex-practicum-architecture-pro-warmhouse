@@ -53,11 +53,11 @@
 
 UserService
 
-![Диаграмма компонента UserService](schemas/to-be/UserService.png)
+![Диаграмма компонента UsersService](schemas/to-be/UsersService.png)
 
 DeviceService
 
-![Диаграмма компонента DeviceService](schemas/to-be/DeviceService.png)
+![Диаграмма компонента DevicesService](schemas/to-be/DevicesService.png)
 
 TelemetryService
 
@@ -71,7 +71,7 @@ AutomationService
 
 DeviceService
 
-![Диаграмма кода DeviceService](schemas/to-be/DeviceServiceCode.png)
+![Диаграмма кода DevicesService](schemas/to-be/DevicesServiceCode.png)
 
 TelemetryService
 

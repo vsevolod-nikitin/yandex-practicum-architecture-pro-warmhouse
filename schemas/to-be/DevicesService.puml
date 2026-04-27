@@ -1,13 +1,13 @@
-@startuml DeviceService
+@startuml DevicesService
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
 Component_Ext(gateway, "ApiGateway", "Маршрутизация запросов к соответствующим сервисам")
 Component_Ext(deprecatedMonolith, "Устаревший монолит", "Старая версия системы, которая будет постепенно заменяться новыми сервисами")
 Component_Ext(containerQueue, "MQTT", "Брокер сообщений для обмена данными с устройствами")
 Component_Ext(automationService, "AutomationService", "Управление автоматизацией и сценариями")
-ComponentDb(deviceDb, "DeviceDB", "PostgreSQL", "Хранение данных устройств")
+ComponentDb(devicesDb, "DevicesDB", "PostgreSQL", "Хранение данных устройств")
 
-Container_Boundary(deviceService, "DeviceService", "Управление устройствами") {
+Container_Boundary(devicesServiceContainer, "DevicesService", "Управление устройствами") {
     Component(devicesController, "DevicesController", "REST API для управления устройствами (CRUD)")
     Component(commandsController, "CommandsController", "REST API для отправки команд устройствам")
 
@@ -20,7 +20,7 @@ Container_Boundary(deviceService, "DeviceService", "Управление уст�
     Rel(commandsController, commandsService, "Использует")
 
     Rel(devicesService, devicesRepository, "Взаимодействует с данными через")
-    Rel(devicesRepository, deviceDb, "Читает и записывает данные")
+    Rel(devicesRepository, devicesDb, "Читает и записывает данные")
 }
 
 Rel(gateway, devicesController, "Обращается к")

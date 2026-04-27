@@ -1,10 +1,10 @@
-@startuml UserService
+@startuml UsersService
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
 Component_Ext(gateway, "ApiGateway", "Маршрутизация запросов к соответствующим сервисам")
-ComponentDb(userDb, "UserDB", "PostgreSQL", "Хранение данных пользователей и домов")
+ComponentDb(usersDb, "UsersDB", "PostgreSQL", "Хранение данных пользователей и домов")
 
-Container_Boundary(userService, "UserService", "Управление пользователями и домами") {
+Container_Boundary(usersServiceContainer, "UsersService", "Управление пользователями и домами") {
     Component(authController, "AuthController", "REST API для аутентификации и управления сессиями")
     Component(usersController, "UsersController", "REST API для управления пользователями (CRUD)")
     Component(housesController, "HousesController", "REST API для управления домами (CRUD)")
@@ -24,9 +24,9 @@ Container_Boundary(userService, "UserService", "Управление польз�
     Rel(usersService, usersRepository, "Взаимодействует с данными через")
     Rel(housesService, housesRepository, "Взаимодействует с данными через")
 
-    Rel(authRepository, userDb, "Читает и записывает данные")
-    Rel(usersRepository, userDb, "Читает и записывает данные")
-    Rel(housesRepository, userDb, "Читает и записывает данные")
+    Rel(authRepository, usersDb, "Читает и записывает данные")
+    Rel(usersRepository, usersDb, "Читает и записывает данные")
+    Rel(housesRepository, usersDb, "Читает и записывает данные")
 }
 
 Rel(gateway, authController, "Обращается к")
