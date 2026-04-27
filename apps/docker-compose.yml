@@ -62,6 +62,7 @@ services:
     environment:
       - ASPNETCORE_HTTP_PORTS=8082
       - ConnectionStrings__DbConnection=Host=postgres;Port=5432;Database=smarthome-devices;Username=postgres;Password=postgres
+      - LEGACY_API_URL=http://app:8080/
     restart: unless-stopped
     networks:
       - smarthome-network

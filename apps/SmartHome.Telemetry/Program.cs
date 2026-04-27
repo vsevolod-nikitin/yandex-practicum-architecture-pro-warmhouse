@@ -3,6 +3,8 @@ using SmartHome.Telemetry.Model;
 using SmartHome.Telemetry.Repositories;
 using SmartHome.Telemetry.Services;
 using SmartHome.Telemetry.Services.Implementation;
+using SmartHome.Telemetry.Services.Legacy;
+using SmartHome.Telemetry.Services.Legacy.Implementation;
 using System.Reflection;
 
 namespace SmartHome.Telemetry
@@ -21,7 +23,7 @@ namespace SmartHome.Telemetry
             });
 
             builder.Services.AddTransient<ITelemetryService, TelemetryService>();
-            builder.Services.AddHttpClient<ILegacyFallback, LegacyFallback>(client =>
+            builder.Services.AddHttpClient<ILegacyTelemetryService, LegacyTelemetryService>(client =>
             {
                 var legacyApiUrl = builder.Configuration["LEGACY_API_URL"];
 

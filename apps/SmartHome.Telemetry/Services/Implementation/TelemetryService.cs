@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SmartHome.Telemetry.Model;
 using SmartHome.Telemetry.Repositories;
+using SmartHome.Telemetry.Services.Legacy;
 using System.Text.Json;
 
 namespace SmartHome.Telemetry.Services.Implementation
@@ -9,10 +10,10 @@ namespace SmartHome.Telemetry.Services.Implementation
     /// Реализация сервиса для получения телеметрических данных устройств.
     /// </summary>
     /// <param name="context">Контекст данных телеметрии устройств.</param>
-    /// <param name="legacyFallback">Откат на получение информации с монолита.</param>
+    /// <param name="legacyTelemetry">Функционал для взаимодействия с монолитом.</param>
     internal sealed class TelemetryService(
         TelemetryContext context,
-        ILegacyFallback legacyFallback) : ITelemetryService
+        ILegacyTelemetryService legacyTelemetry) : ITelemetryService
     {
         /// <inheritdoc/>
         public async Task<IEnumerable<TelemetryData>?> GetTelemetryDataAsync(int deviceId, DateTime? from, DateTime? to)
@@ -36,7 +37,7 @@ namespace SmartHome.Telemetry.Services.Implementation
             }
 
             // Если данных нет, пробуем получить их с монолита
-            var legacyData = await legacyFallback.GetTelemetryAsync(deviceId);
+            var legacyData = await legacyTelemetry.GetTelemetryAsync(deviceId);
             if (legacyData is not null)
             {
                 // Преобразовываем старый формат

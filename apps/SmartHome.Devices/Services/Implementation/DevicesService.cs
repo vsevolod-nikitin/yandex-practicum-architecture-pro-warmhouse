@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SmartHome.Devices.Model;
 using SmartHome.Devices.Repositories;
+using SmartHome.Devices.Services.Legacy;
 
 namespace SmartHome.Devices.Services.Implementation
 {
@@ -8,8 +9,13 @@ namespace SmartHome.Devices.Services.Implementation
     /// Реализация сервиса для работы с устройствами.
     /// </summary>
     /// <param name="context">Контекст базы данных.</param>
-    internal sealed class DevicesService(DevicesContext context) : IDevicesService
+    /// <param name="legacyDevices">Функционал для взаимодействия с монолитом.</param>
+    internal sealed class DevicesService(
+        DevicesContext context,
+        ILegacyDevicesService legacyDevices) : IDevicesService
     {
+        private const string LegacySensorType = "LegacySensor";
+
         /// <inheritdoc/>
         public async Task<IEnumerable<DeviceDto>> GetDevicesAsync(long houseId)
         {
@@ -25,7 +31,21 @@ namespace SmartHome.Devices.Services.Implementation
                     Location = x.Location,
                 })
                 .AsNoTracking()
-                .ToArrayAsync();
+                .ToListAsync();
+
+            // Собираем данные с монолита
+            foreach (var device in await legacyDevices.GetAllDevicesAsync())
+            {
+                var deviceDto = new DeviceDto
+                {
+                    Id = device.Id,
+                    HouseId = houseId,
+                    TypeName = LegacySensorType,
+                    Name = device.Name,
+                    Location = device.Location,
+                };
+                devices.Add(deviceDto);
+            }
 
             return devices;
         }

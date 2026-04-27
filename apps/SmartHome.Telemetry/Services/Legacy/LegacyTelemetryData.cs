@@ -1,11 +1,11 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace SmartHome.Telemetry.Services
+namespace SmartHome.Telemetry.Services.Legacy
 {
     /// <summary>
     /// Ответ от монолита с данными телеметрии устройств.
     /// </summary>
-    internal sealed class LegacyResponse
+    internal sealed class LegacyTelemetryData
     {
         /// <summary>
         /// Значение температуры.

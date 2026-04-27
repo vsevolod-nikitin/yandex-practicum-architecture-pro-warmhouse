@@ -3,6 +3,8 @@ using SmartHome.Devices.Model;
 using SmartHome.Devices.Repositories;
 using SmartHome.Devices.Services;
 using SmartHome.Devices.Services.Implementation;
+using SmartHome.Devices.Services.Legacy;
+using SmartHome.Devices.Services.Legacy.Implementation;
 using System.Reflection;
 
 namespace SmartHome.Devices
@@ -22,6 +24,17 @@ namespace SmartHome.Devices
 
             builder.Services.AddTransient<IDevicesService, DevicesService>();
             builder.Services.AddTransient<IDeviceTypesService, DeviceTypesService>();
+            builder.Services.AddHttpClient<ILegacyDevicesService, LegacyDevicesService>(client =>
+            {
+                var legacyApiUrl = builder.Configuration["LEGACY_API_URL"];
+
+                if (string.IsNullOrWhiteSpace(legacyApiUrl))
+                {
+                    throw new InvalidOperationException("Ключ конфигурации 'LEGACY_API_URL' отсутствует.");
+                }
+
+                client.BaseAddress = new Uri(legacyApiUrl);
+            });
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
@@ -71,6 +84,9 @@ namespace SmartHome.Devices
             );
 
             context.SaveChanges();
+
+            // Установка начального значения для генерации идентификаторов устройств, чтобы не пересекаться с данными из монолита
+            context.Database.ExecuteSqlInterpolated($"ALTER SEQUENCE devices_id_seq RESTART 2000");
         }
     }
 }
