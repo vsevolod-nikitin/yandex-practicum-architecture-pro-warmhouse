@@ -36,6 +36,12 @@ namespace SmartHome.Devices
                 client.BaseAddress = new Uri(legacyApiUrl);
             });
 
+            builder.Services.Configure<RouteOptions>(options =>
+            {
+                options.LowercaseUrls = true;
+                options.LowercaseQueryStrings = true;
+            });
+
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(options =>
