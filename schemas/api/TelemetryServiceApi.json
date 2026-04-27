@@ -5,7 +5,7 @@
     "version": "1.0"
   },
   "paths": {
-    "/api/v1/Telemetry/{deviceId}": {
+    "/api/v1/telemetry/{deviceId}": {
       "get": {
         "tags": [
           "Telemetry"
