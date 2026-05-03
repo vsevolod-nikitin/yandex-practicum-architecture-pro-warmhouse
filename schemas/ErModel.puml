@@ -1,0 +1,55 @@
+@startuml ErModel
+
+entity User {
+    * id : long
+    * email : string
+    * password_hash : string
+    name : string
+}
+
+entity House {
+    * id : long
+    * name : string
+}
+
+entity UsersHouses {
+    * user_id : long
+    * house_id : long
+}
+
+entity Device {
+    * id : long
+    * house_id : long
+    * type_id : long
+    * serial_id : string
+    name : string
+}
+
+entity DeviceType {
+    * id : long
+    * name : string
+}
+
+entity Telemetry {
+    * id : long
+    * device_id : long
+    * timestamp : DateTime
+    * data : string
+}
+
+entity AutomationScenario {
+    * id : long
+    * device_id : long
+    * name : string    
+    * command : string
+    * schedule : string
+}
+
+User ||--o{ UsersHouses
+House ||--o{ UsersHouses
+House ||--o{ Device
+Device ||--|| DeviceType
+Device ||--o{ Telemetry
+Device ||--o{ AutomationScenario
+
+@enduml

@@ -1,0 +1,29 @@
+@startuml TelemetryService
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Component_Ext(gateway, "ApiGateway", "Маршрутизация запросов к соответствующим сервисам")
+Component_Ext(deprecatedMonolith, "Устаревший монолит", "Старая версия системы, которая будет постепенно заменяться новыми сервисами")
+Component_Ext(containerQueue, "MQTT", "Брокер сообщений для обмена данными с устройствами")
+ComponentDb(telemetryDb, "TelemetryDB", "PostgreSQL", "Хранение телеметрии от устройств")
+
+Container_Boundary(telemetryService, "TelemetryService", "Сбор и обработка данных от устройств") {
+    Component(telemetryController, "TelemetryController", "REST API для получения данных от устройств")
+
+    Component(telemetryServiceImpl, "TelemetryService", "Бизнес-логика обработки данных от устройств")
+    Component(telemetryProcessor, "TelemetryProcessor", "Обработка данных от устройств")
+
+    Component(telemetryRepository, "TelemetryRepository", "Доступ к данным телеметрии от устройств")
+
+    Rel(telemetryController, telemetryServiceImpl, "Использует")
+
+    Rel(telemetryServiceImpl, telemetryRepository, "Взаимодействует с данными через")
+    Rel(telemetryProcessor, telemetryRepository, "Записывает данные через")
+    Rel_Left(telemetryServiceImpl, deprecatedMonolith, "Получает данные температуры")
+
+    Rel(telemetryRepository, telemetryDb, "Читает и записывает данные")
+}
+
+Rel(gateway, telemetryController, "Обращается к")
+Rel(telemetryProcessor, containerQueue, "Подписывается на данные от устройств")
+
+@enduml

@@ -1,0 +1,43 @@
+@startuml DevicesServiceCode
+
+class DevicesController{
+    +GetDevicesForHouse(long houseId) : DeviceDto[]
+    +GetDeviceById(long deviceId) : DeviceDto
+    +CreateDevice(DeviceDto device) : DeviceDto
+    +UpdateDevice(long deviceId, DeviceDto device) : DeviceDto
+    +DeleteDevice(long deviceId) : void
+}
+
+class DeviceTypesController{
+    +GetDeviceTypes() : DeviceType[]
+}
+
+class DevicesService{
+    +GetDevicesAsync(long houseId) : DeviceDto[]
+    +GetDeviceByIdAsync(long deviceId) : DeviceDto
+    +CreateDeviceAsync(DeviceDto device) : long
+    +UpdateDeviceAsync(long deviceId, DeviceDto device) : DeviceDto
+    +DeleteDeviceAsync(long deviceId) : bool
+}
+
+class DeviceTypesService{
+    +GetDeviceTypesAsync() : DeviceType[]
+}
+
+class DeviceContext{
+    +Devices : DbSet<Device> <<get>> <<set>>
+    +DeviceTypes : DbSet<DeviceType> <<get>> <<set>>
+}
+
+class LegacyDevicesService{
+    +GetAllDevicesAsync() : LegacyDevice[]
+    // Другие методы для взаимодействия с устаревшей системой не реализованы
+}
+
+DevicesController --> DevicesService : использует
+DeviceTypesController --> DeviceTypesService : использует
+DevicesService --> DeviceContext : взаимодействует с данными через
+DeviceTypesService --> DeviceContext : взаимодействует с данными через
+DevicesService --> LegacyDevicesService : работает с устаревшей системой через
+
+@enduml

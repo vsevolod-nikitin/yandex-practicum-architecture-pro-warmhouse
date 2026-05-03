@@ -1,0 +1,36 @@
+@startuml UsersService
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Component_Ext(gateway, "ApiGateway", "Маршрутизация запросов к соответствующим сервисам")
+ComponentDb(usersDb, "UsersDB", "PostgreSQL", "Хранение данных пользователей и домов")
+
+Container_Boundary(usersServiceContainer, "UsersService", "Управление пользователями и домами") {
+    Component(authController, "AuthController", "REST API для аутентификации и управления сессиями")
+    Component(usersController, "UsersController", "REST API для управления пользователями (CRUD)")
+    Component(housesController, "HousesController", "REST API для управления домами (CRUD)")
+
+    Component(authService, "AuthService", "Аутентификация, управление сессиями")
+    Component(usersService, "UsersService", "Бизнес-логика управления пользователями")
+    Component(housesService, "HousesService", "Бизнес-логика управления домами")
+        
+    Component(authRepository, "AuthRepository", "Доступ к данным аутентификации и сессий")
+    Component(usersRepository, "UsersRepository", "Доступ к данным пользователей")
+    Component(housesRepository, "HousesRepository", "Доступ к данным домов")
+    Rel(authController, authService, "Использует")
+    Rel(usersController, usersService, "Использует")
+    Rel(housesController, housesService, "Использует")
+
+    Rel(authService, authRepository, "Взаимодействует с данными через")
+    Rel(usersService, usersRepository, "Взаимодействует с данными через")
+    Rel(housesService, housesRepository, "Взаимодействует с данными через")
+
+    Rel(authRepository, usersDb, "Читает и записывает данные")
+    Rel(usersRepository, usersDb, "Читает и записывает данные")
+    Rel(housesRepository, usersDb, "Читает и записывает данные")
+}
+
+Rel(gateway, authController, "Обращается к")
+Rel(gateway, usersController, "Обращается к")
+Rel(gateway, housesController, "Обращается к")
+
+@enduml

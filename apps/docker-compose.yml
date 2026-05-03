@@ -4,10 +4,34 @@ services:
   postgres:
     image: postgres:16-alpine
     container_name: smarthome-postgres
-  ## тут нужно добавить настройки
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./smart_home/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d smarthome"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - smarthome-network
 
   temperature-api:
-  ## тут нужно добавить приложение
+    build:
+      context: .
+      dockerfile: TemperatureApi/Dockerfile
+    container_name: temperature-api
+    ports:
+      - "8081:8081"
+    environment:
+      - ASPNETCORE_HTTP_PORTS=8081
+    restart: unless-stopped
+    networks:
+      - smarthome-network
 
   app:
     build:
@@ -24,6 +48,36 @@ services:
       - TEMPERATURE_API_URL=http://temperature-api:8081
     ports:
       - "8080:8080"
+    restart: unless-stopped
+    networks:
+      - smarthome-network
+
+  smarthome-devices:
+    build:
+      context: .
+      dockerfile: SmartHome.Devices/Dockerfile
+    container_name: smarthome-devices
+    ports:
+      - "8082:8082"
+    environment:
+      - ASPNETCORE_HTTP_PORTS=8082
+      - ConnectionStrings__DbConnection=Host=postgres;Port=5432;Database=smarthome-devices;Username=postgres;Password=postgres
+      - LEGACY_API_URL=http://app:8080/
+    restart: unless-stopped
+    networks:
+      - smarthome-network
+
+  smarthome-telemetry:
+    build:
+      context: .
+      dockerfile: SmartHome.Telemetry/Dockerfile
+    container_name: smarthome-telemetry
+    ports:
+      - "8083:8083"
+    environment:
+      - ASPNETCORE_HTTP_PORTS=8083
+      - ConnectionStrings__DbConnection=Host=postgres;Port=5432;Database=smarthome-telemetry;Username=postgres;Password=postgres
+      - LEGACY_API_URL=http://app:8080/
     restart: unless-stopped
     networks:
       - smarthome-network

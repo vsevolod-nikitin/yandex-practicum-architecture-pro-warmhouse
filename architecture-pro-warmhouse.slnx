@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="apps/docker-compose.yml" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="apps/SmartHome.Devices/SmartHome.Devices.csproj" Id="a24d1982-2f70-4696-bc32-2e1eb4fecdb5" />
+    <Project Path="apps/SmartHome.Telemetry/SmartHome.Telemetry.csproj" Id="dbb7be3d-ad8d-42c2-9c29-89a20340437c" />
+    <Project Path="apps/TemperatureApi/TemperatureApi.csproj" />
+  </Folder>
+</Solution>

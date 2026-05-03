@@ -1,0 +1,57 @@
+@startuml Containers
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(user, "User", "Пользователь системы")
+
+System_Ext(device, "Подключаемое устройство", "IoT устройство (ворота, термостат)")
+System_Ext(deprecatedMonolith, "Устаревший монолит", "Старая версия системы, которая будет постепенно заменяться новыми сервисами")
+
+Container(apiGateway, "ApiGateway", "Маршрутизация запросов к соответствующим сервисам")
+
+System_Boundary(usersDomain, "Пользователи и дома") {
+    Container(usersService, "UsersService", "Управление пользователями и домами")
+    ContainerDb(usersDb, "UsersDB", "PostgreSQL", "Хранение данных пользователей и домов")
+}
+
+System_Boundary(automationDomain, "Автоматизация") {
+    Container(automationService, "AutomationService", "Управление автоматизацией и сценариями")
+    ContainerDb(automationDb, "AutomationDB", "PostgreSQL", "Хранение данных сценариев автоматизации")
+}
+
+System_Boundary(devicesDomain, "Устройства") {
+    Container(devicesService, "DevicesService", "Управление устройствами, отправка команд, получение данных")    
+    ContainerDb(devicesDb, "DevicesDB", "PostgreSQL", "Хранение данных устройств")    
+}
+
+System_Boundary(telemetryDomain, "Телеметрия") {
+    Container(telemetryService, "TelemetryService", "Сбор и обработка данных от устройств")
+    ContainerDb(telemetryDb, "TelemetryDB", "PostgreSQL", "Хранение телеметрии от устройств")
+}
+
+ContainerQueue(deviceQueue, "MQTT", "Брокер сообщений для обмена данными с устройствами")
+
+Rel(user, apiGateway, "Использует")
+Rel_Left(user, device, "Взаимодействует с")
+
+Rel_Left(apiGateway, usersService, "Управляет пользователями и домами")
+Rel(apiGateway, automationService, "Настраивает автоматизацию")
+Rel(apiGateway, devicesService, "Управляет устройствами")
+Rel(apiGateway, telemetryService, "Получает данные от устройств")
+
+Rel(usersService, usersDb, "Читает и записывает")
+Rel(devicesService, devicesDb, "Читает и записывает")
+Rel(automationService, automationDb, "Читает и записывает")
+Rel(telemetryService, telemetryDb, "Читает и записывает")
+
+Rel(automationService, devicesService, "Отправляет команды")
+Rel_Left(devicesService, deviceQueue, "Публикует команды и получает данные")
+Rel(telemetryService, deviceQueue, "Подписывается на данные от устройств")
+
+Rel(device, deviceQueue, "Отправляет данные и получает команды")
+
+Rel(devicesService, deprecatedMonolith, "Управляет отоплением")
+Rel(telemetryService, deprecatedMonolith, "Получает данные температуры")
+
+LAYOUT_TOP_DOWN()
+
+@enduml

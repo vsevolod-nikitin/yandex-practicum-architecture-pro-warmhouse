@@ -1,1 +1,25 @@
 .DS_Store
+.github/
+
+# Build outputs
+bin/
+obj/
+out/
+artifacts/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.rsuser
+
+# Visual Studio cache
+.vs/
+
+# .NET
+*.cache
+TestResults/
+coverage/
+coverage.*
+*.nupkg
